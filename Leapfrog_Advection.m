@@ -1,12 +1,14 @@
-function xyz=leapfrog17(a)
+function xyz=leapfrog17v2(a)
 
 % a is the scalar parameter in our scalar advection equation,
 %   u_t+au_x=0.
 % h=delta(x), k=delta(t)
 
+% Note: |ak/h|<1 for stability 
+
 k=0.1;
 tsteps=20;   % number of time grid points
-m=19;        % number of time grid points - 1
+m=19;        % number of grid points - 1
 h=2*pi/(m+1);
 x=[0:h:2*pi];
 
@@ -19,15 +21,22 @@ x=[0:h:2*pi];
 %   cheat and use the exact solution.
 % If  u(x,0)=f(x),  u(x,t)=f(x-at).
 
-u0=sin(x);      % u(x,0)
-u1=sin(x-a*k);  % u(x,k) from exact solution
+u1=sin(x);      % u(x,0)
+u2=sin(x-a*k);  % u(x,k) from exact solution  (x,t)=sin(x-a*t)
 
-for n=2:tsteps
+for n=2:tsteps 
+u0=u1;  % This is necessary b/c the function below updates the next
+u1=u2;  %   time step by using the previous two times.  The most recent
+        %   time is the u2 vector from the previous iteration.  If we
+        %   rewrite it as we go along, we will lose the grid points we
+        %   need.  So  previous time step -> u1,  previous previous time
+        %   step -> u2, store values into u2 as current time
+
 % grid points for t=2, x=[2h,(m+1)h]
    u2(2:m+1)=u0(2:m+1)-(a*k/h)*(u1(3:m+2)-u1(1:m));
 
 % periodic boundary conditions, u(0,t)=u((m+2)h,t)
-   u2(1)=u0(1)-(a*k/h)*(u1(2)-u1(m+1));
+   u2(1)=u0(1)-(a*k/h)*(u1(2)-u1(m+2));
    u2(m+2)=u2(1);
 end
 
@@ -36,5 +45,3 @@ plot(x,u2,'k',x,sin(x-a*k*tsteps),'b')
 xlabel('x')
 ylabel('u')
 title('Leapfrog Solution vs. Exact Solution')
-github test change
-github test pull
