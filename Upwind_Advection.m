@@ -38,4 +38,4 @@ hold on
 plot(x,sin(x-a*k*m),'k')  % exact solution: sin(x-a*t_final)
 title('Upwind Scheme vs. Exact Solution')
 
-err=norm(sin(x-a*k*m)-u1)
+err=norm(sin(x-a*k*m)-u1);
