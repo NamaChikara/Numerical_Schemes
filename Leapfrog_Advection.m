@@ -1,4 +1,4 @@
-function xyz=leapfrog17v2(a)
+function xyz=Leapfrog_Advection(a)
 
 % a is the scalar parameter in our scalar advection equation,
 %   u_t+au_x=0.
@@ -6,7 +6,7 @@ function xyz=leapfrog17v2(a)
 
 % Note: |ak/h|<1 for stability 
 
-k=0.1;
+k=0.1;  
 tsteps=20;   % number of time grid points
 m=19;        % number of grid points - 1
 h=2*pi/(m+1);
