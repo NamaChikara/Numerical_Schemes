@@ -14,6 +14,12 @@ tdu=t(1:length(t)-1);    %    in the loop below. no reason to have
                          
 u(1)=-0.25;    % initial value
 
+Ru=zeros(1,length(t)); % Resolvent solution method
+Ru(1)=-0.25;
+for i=2:length(t)
+    Ru(i)=Resolvent_Hvsd(Ru(i-1),f(t(i)),h);
+end
+
 for i=2:length(t)
     % t(1)=u(1), so we move to t(2),u(2)
     if u(i-1)<0
@@ -46,5 +52,5 @@ for i=1:length(t)
 end
 
 figure
-plot(t,u,'r',tdu,du,'k',t,sol,'--')
+plot(t,u,'r',t,Ru,'-o')%,tdu,du,'k',t,sol,'--',)
     
