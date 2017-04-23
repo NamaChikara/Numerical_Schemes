@@ -8,14 +8,9 @@ h=0.1;  % time step
 t=[0:h:10];   % time grid
 
 f=@(t) sin(t)-0.5; 
-IC=2;    % initial value=-F(t)=-(-cos(0)-0.5*0)
+IC=2;    % initial value
 
-Ru=zeros(1,length(t)); % Resolvent solution method
-Ru(1)=IC;
-for i=2:length(t)
-    Ru(i)=Resolvent_Hvsd(Ru(i-1),f(t(i)),h);
-end
-
+% Explicit Euler
 u=zeros(1,length(t)); % initialize u solution vector for explicit Euler
 du=zeros(1,length(t)-1); % du is calculated for previous u value
 tdu=t(1:length(t)-1);    %    in the loop below. no reason to have
@@ -31,26 +26,37 @@ for i=2:length(t)
     end
 end
 
+% Implict Euler with Resolvent
+Ru=zeros(1,length(t)); 
+Ru(1)=IC;
+for i=2:length(t)
+    Ru(i)=Resolvent_Hvsd(Ru(i-1),f(t(i)),h);
+end
+
 sol=zeros(1,length(t)); % analytical solution
+a=zeros(length(t));
 for i=1:length(t)
     u1=u(i);
     if i==1
         u0=u(i);
-        a=0;
+        a(i)=0;
     else u0=u(i-1);
     end
     if sign(u1)-sign(u0)>0
-        a=t(i);
+        a(i)=t(i);
     else if sign(u1)-sign(u0)<0
-        a=-t(i);
+        a(i)=-t(i);
         end
     end
     if u(i)<0
-        sol(i)=cos(t(i))+0.5*t(i)+IC+1+a;  % F(t)+u_0-F(0)+c
-    else sol(i)=cos(t(i))-0.5*t(i)+IC+1+a;
+        sol(i)=cos(t(i))+0.5*t(i)+IC-1+sum(a(1:i));  % F(t)+u_0-F(0)+c
+    else sol(i)=cos(t(i))+0.5*t(i)-t(i)+IC-1+sum(a(1:i));
     end
 end
 
 figure
 plot(t,u,'r',t,Ru,'-o',t,sol,'--')%tdu,du,'k',
+legend('Explicit Euler','Resolvent Method','Analytical')
+%title('Solutions for f(t)=sin(t)-0.5 with u(0)=2')
+xlabel('t');ylabel('u(t)')
     
