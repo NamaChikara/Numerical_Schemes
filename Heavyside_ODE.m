@@ -8,10 +8,10 @@ h=0.1;  % time step
 t=[0:h:10];   % time grid
 
 f=@(t) sin(t)-0.5; 
-u(1)=-0.25;    % initial value
+IC=2;    % initial value=-F(t)=-(-cos(0)-0.5*0)
 
 Ru=zeros(1,length(t)); % Resolvent solution method
-Ru(1)=u(1);
+Ru(1)=IC;
 for i=2:length(t)
     Ru(i)=Resolvent_Hvsd(Ru(i-1),f(t(i)),h);
 end
@@ -20,6 +20,7 @@ u=zeros(1,length(t)); % initialize u solution vector for explicit Euler
 du=zeros(1,length(t)-1); % du is calculated for previous u value
 tdu=t(1:length(t)-1);    %    in the loop below. no reason to have
                          %    du(length(t)) value as it wont be used
+u(1)=IC;
 for i=2:length(t)
     % t(1)=u(1), so we move to t(2),u(2)
     if u(i-1)<0
@@ -45,8 +46,8 @@ for i=1:length(t)
         end
     end
     if u(i)<0
-        sol(i)=cos(t(i))+0.5*t(i)+u(1)+1+a;  % F(t)+u_0-F(0)+c
-    else sol(i)=cos(t(i))-0.5*t(i)+u(1)+1+a;
+        sol(i)=cos(t(i))+0.5*t(i)+IC+1+a;  % F(t)+u_0-F(0)+c
+    else sol(i)=cos(t(i))-0.5*t(i)+IC+1+a;
     end
 end
 
