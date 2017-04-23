@@ -13,14 +13,14 @@
 %    P'=H_a(C-S)*(C-1)^2.
 
 
-f=@(t)0.1*t; % species A source
+f=@(t)t; % species A source
 df=@(t) 0.1; % species A source rate
-g=@(t)0.05*t; % species B source
+g=@(t)0.5*t; % species B source
 dg=@(t) 0.05; % species B source rate
 S=1; % concentration product required for precipitation
 
-h=0.01; % time step
-t=[0:h:20]; % time grid
+h=0.1; % time step
+t=[0:h:5]; % time grid
 
 % Non-Yosida
 A=zeros(1,length(t)); % Species A solution 
@@ -37,7 +37,7 @@ for i=2:length(t)
         du(i-1)=0;
     else du(i-1)=(C-1)^2;
     end
-    A(i)=A(i-1)+f(t(i))-f(t(i-1))-h*du(i-1); %h*(dg(t(i-1))-du(i-1));
+    A(i)=A(i-1)+h*(df(i-1)-du(i-1));%f(t(i))-f(t(i-1))-h*du(i-1); %h*(dg(t(i-1))-du(i-1));
     B(i)=B(i-1)+g(t(i))-g(t(i-1))-h*du(i-1);
     P(i)=P(i-1)+h*du(i-1);
 end
@@ -50,7 +50,7 @@ YP=zeros(1,length(t)); % Precipitation solution
 YP(1)=0; % Initial value
 
 Ydu=length(t);
-a=1;
+a=0.5;
 for i=2:length(t)
     C=YA(i-1)*YB(i-1);
     if C<S
