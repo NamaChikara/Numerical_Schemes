@@ -49,8 +49,10 @@ for i=1:length(t)
         end
     end
     if u(i)<0
-        sol(i)=cos(t(i))+0.5*t(i)+IC-1+sum(a(1:i));  % F(t)+u_0-F(0)+c
-    else sol(i)=cos(t(i))+0.5*t(i)-t(i)+IC-1+sum(a(1:i));
+        %sol(i)=log(abs(cos(t(i))))+IC+0+sum(a(1:i));
+        sol(i)=cos(t(i))+0.5*t(i)+IC-1+sum(a(1:i));  % -F(t)+u_0+F(0)+c
+    else %sol(i)=log(abs(cos(t(i))))-t(i)+IC+0+sum(a(1:i));
+        sol(i)=cos(t(i))+0.5*t(i)-t(i)+IC-1+sum(a(1:i)); %-F(t)-t+u(0)+F(0)+c
     end
 end
 
