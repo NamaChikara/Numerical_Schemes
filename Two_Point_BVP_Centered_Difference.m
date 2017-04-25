@@ -1,4 +1,4 @@
-m=9; % number of unknowns
+m=255; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -26,7 +26,8 @@ for i=2:m-1;
     A(i,i+1)=1; % lower diagonal is 1
 end
 
-u=h^2.*(inverse(A)*F);
+u(2:m+1)=h^2.*(A^(-1)*F);
 u=u';
 
-plot(x,u)
+exact=@(x) (-1/pi^2)*sin(pi*x); % exact solution
+plot(x,u,x,exact(x))
