@@ -13,10 +13,10 @@
 %    P'=H_a(C-S)*(C-1)^2.
 
 
-f=@(t)0.1*t; % species A source
-df=@(t) 0.1; % species A source rate
-g=@(t)0.05*t; % species B source
-dg=@(t) 0.05; % species B source rate
+f=@(t)0.2*t; % species A source
+df=@(t) 0.2; % species A source rate
+g=@(t)0.1*t; % species B source
+dg=@(t) 0.1; % species B source rate
 S=1; % concentration product required for precipitation
 
 h=0.1; % time step
@@ -70,5 +70,16 @@ plot(t,A,'r',t,B,'b',t,P,'k',t,YA,'r--',t,YB,'b--',t,YP,'k--')
 xlabel('t');ylabel('Concentration');
 lgnd=legend('A','B','P','Yosida A','Yosida B','Yosida P');
 lgnd.Location='northwest';
-    
-        
+
+%% v4.24.n2
+% Plot 1 
+% f=0.2*t, g=0.1*t, S=2, a=1
+
+% Plot 2
+% a=0.5
+
+% Plot 3
+% a=0.1
+
+% Plot 4
+% S=1, a=0.1
