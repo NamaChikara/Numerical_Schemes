@@ -36,13 +36,13 @@ grid_error=sqrt(h)*norm(u-exact(x));
 
 
 %%
-% v2.30.n1
+% v4.30.n2
 
 % Plot 1
 % Log-Log plot of error vs. h for f(x)=sin(pi*x) and grid refinements of
 % 0.5 for 2^{-3} through 2^{-6}.
-% x=[2e-6,2e-5,2e-4,2e-3]; % mesh size
+% x=[2^(-6),2^(-5),2^(-4),2^(-3)]; % mesh size
 % y=[1.439e-5,5.752e-5,2.306e-4,9.279e-4]; % associated 2-grid-norm errors
-% loglog(x,y)
+% loglog(x,y,'-o')
 % title('Errors in Centered Difference Appx. vs. Mesh Size')
 % xlabel('mesh size (h)'); ylabel('Error on (0,1)')
