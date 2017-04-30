@@ -4,11 +4,11 @@
 % Our ODE is u'+A(u)+f(t)=0, so explicit Euler is
 %     u(n+1)=u(n)+h*(-A(u(n))-f(t(n)))
 
-h=0.1;  % time step
-t=[0:h:10];   % time grid
+h=0.8;  % time step
+t=[0:h:2*pi];   % time grid
 
 f=@(t) sin(t)-0.5; 
-IC=2;    % initial value
+IC=1.1;    % initial value
 
 % Explicit Euler
 u=zeros(1,length(t)); % initialize u solution vector for explicit Euler
@@ -57,7 +57,7 @@ for i=1:length(t)
 end
 
 figure
-plot(t,u,'r',t,Ru,'-o',t,sol,'--')%tdu,du,'k',
+plot(t(2:3:end),u(2:3:end),'rs-',t(1:3:end),Ru(1:3:end),'bo-',t,sol,'k+')%tdu,du,'k',
 legend('Explicit Euler','Resolvent Method','Analytical')
 %title('Solutions for f(t)=sin(t)-0.5 with u(0)=2')
 xlabel('t');ylabel('u(t)')
