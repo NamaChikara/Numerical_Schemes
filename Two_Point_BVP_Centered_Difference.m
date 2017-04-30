@@ -1,4 +1,4 @@
-m=63; % number of unknowns
+m=14; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -7,12 +7,16 @@ u=zeros(m+2,1);  % Initialize solution vector
 u(1)=0;     % Boundary condition, u(x=0)
 u(m+2)=0;   % Boundary condition, u(x=1)
 
-f=@(x) sin(pi*x);  % u''=f(x)
+% f=@(x) 0;  % u''=f(x)
+
 F=zeros(m,1);   % Column vector for numerical scheme.
 F(1)=f(x(2))-u(1)/h^2;  % f(x=h)-f(x=0)/h^2
 F(m)=f(x(m+1))-u(m+2)/h^2;  % f(x=m*h)-f(x=1)/h^2
 for i=2:m-1
-    F(i)=f(x(i+1));
+    if x(i+1)<0.5
+        F(i)=0;
+    else F(i)=1;
+    end
 end
 
 A=zeros(m,m);   % Matrix for numerical scheme.
@@ -29,10 +33,17 @@ end
 u(2:m+1)=h^2.*(A^(-1)*F);
 u=u';
 
-exact=@(x) (-1/pi^2)*sin(pi*x); % exact solution
-%plot(x,u,x,exact(x))
+%exact=@(x) (-1/pi^2)*sin(pi*x); % exact solution
 
-grid_error=sqrt(h)*norm(u-exact(x));
+exact1=@(x) -0.125.*x;
+region1=[0:0.01:0.5]; 
+exact2=@(x) 0.5.*x.^2-0.625.*x+0.125;
+region2=[0.5:0.01:1];
+
+%figure
+plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
+%hold on
+%grid_error=sqrt(h)*norm(u-exact(x));
 
 
 %%
@@ -46,3 +57,14 @@ grid_error=sqrt(h)*norm(u-exact(x));
 % loglog(x,y,'-o')
 % title('Errors in Centered Difference Appx. vs. Mesh Size')
 % xlabel('mesh size (h)'); ylabel('Error on (0,1)')
+
+% Plot 2
+% Plot of solutios for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids of
+%   m=6,7,14,15 plus the exact solution of 
+%   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5
+% Here, (xi,ui)=(grid with m=i, solution with m=i)
+%   region1=x<0.5, exact1=solution for x<0.5
+% plot(x6,u6,'r--',x14,u14,'r',x7,u7,'b--',x15,u15,'b',region1,exact1(region1),'k',region2,exact2(region2),'k')
+% lgnd=legend('$h=1/7$','$h=1/8$','$h=1/15$','$h=1/16$','exact');
+% set(lgnd,'Interpreter','latex')
+% lgnd.Location='north';
