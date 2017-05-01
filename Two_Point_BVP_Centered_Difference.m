@@ -1,4 +1,4 @@
-m=14; % number of unknowns
+m=127; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -40,10 +40,10 @@ region1=[0:0.01:0.5];
 exact2=@(x) 0.5.*x.^2-0.625.*x+0.125;
 region2=[0.5:0.01:1];
 
-%figure
+figure
 plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
 %hold on
-%grid_error=sqrt(h)*norm(u-exact(x));
+grid_error=sqrt(h)*norm(u-exact(x))
 
 
 %%
@@ -58,13 +58,14 @@ plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
 % title('Errors in Centered Difference Appx. vs. Mesh Size')
 % xlabel('mesh size (h)'); ylabel('Error on (0,1)')
 
+% v4.30.n3
 % Plot 2
 % Plot of solutios for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids of
 %   m=6,7,14,15 plus the exact solution of 
 %   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5
 % Here, (xi,ui)=(grid with m=i, solution with m=i)
 %   region1=x<0.5, exact1=solution for x<0.5
-% plot(x6,u6,'r--',x14,u14,'r',x7,u7,'b--',x15,u15,'b',region1,exact1(region1),'k',region2,exact2(region2),'k')
+% plot(x6,u6,'r--',x7,u7,'r',x14,u14,'b--',x15,u15,'b',region1,exact1(region1),'k',region2,exact2(region2),'k')
 % lgnd=legend('$h=1/7$','$h=1/8$','$h=1/15$','$h=1/16$','exact');
 % set(lgnd,'Interpreter','latex')
 % lgnd.Location='north';
