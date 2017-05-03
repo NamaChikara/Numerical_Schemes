@@ -1,4 +1,4 @@
-m=127; % number of unknowns
+m=15; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -40,10 +40,11 @@ region1=[0:0.01:0.5];
 exact2=@(x) 0.5.*x.^2-0.625.*x+0.125;
 region2=[0.5:0.01:1];
 
-figure
-plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
-%hold on
-grid_error=sqrt(h)*norm(u-exact(x))
+
+%plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
+%plot(x,abs(u-exact(x)),'r')
+
+grid_error=sqrt(h)*norm(abs(u-exact(x)))
 
 
 %%
@@ -60,7 +61,7 @@ grid_error=sqrt(h)*norm(u-exact(x))
 
 % v4.30.n3
 % Plot 2
-% Plot of solutios for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids of
+% Plot of solutions for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids of
 %   m=6,7,14,15 plus the exact solution of 
 %   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5
 % Here, (xi,ui)=(grid with m=i, solution with m=i)
@@ -69,3 +70,14 @@ grid_error=sqrt(h)*norm(u-exact(x))
 % lgnd=legend('$h=1/7$','$h=1/8$','$h=1/15$','$h=1/16$','exact');
 % set(lgnd,'Interpreter','latex')
 % lgnd.Location='north';
+
+% v5.3.n1
+% Plot 3
+% Absolute value of pointwise error for f(x)=(0 if x<0.5)U(1 if x>=0.5) 
+%   and grids of m=6,7,14,15 with the exact solution:
+%   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5.
+% Here, (xi,erri)=(grid with m=i, abs(error) with m=i)
+% plot(x6,err6,'r--',x7,err7,'r',x14,err14,'b--',x15,err15,'b')
+% lgnd=legend('$h=1/7$','$h=1/8$','$h=1/15$','$h=1/16$');
+% set(lgnd,'Interpreter','latex')
+% lgnd.Location='northeast';
