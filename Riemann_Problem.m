@@ -17,7 +17,8 @@ k=te/m; % dt
 t=[0:k:te]; % t grid
 
 if (abs(a*k/h)>1)
-	error('Please select a smaller a.')   % Upwind stable for |ak<h|<1
+	error(['Please select "a" smaller than ', num2str(h/k), '. ',...
+        num2str(0.95*h/k), ' gives |ak/h|=0.95.']) % Upwind stable for |ak<h|<1
 end
 
 % Exact Solution
@@ -83,7 +84,7 @@ for k = 1:tpoints
     plot(x,sol_mat_Lax(k,:),'r',[0 xe],[Err_Lax(k) Err_Lax(k)],'r--',...
         x,sol_mat_Up(k,:),'b',[0 xe],[Err_Up(k) Err_Up(k)],'b--',...
         x,sol_mat_exact(k,:),'k');
-    pause(0.001);     
+    pause(0.05);     
 end
     title('Riemann Problem: Comparison of Numerical Solutions')
     lgnd=legend('Lax-F','Lax-F error','Upwind','Upwind error','Exact');
