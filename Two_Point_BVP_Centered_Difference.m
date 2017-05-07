@@ -1,4 +1,4 @@
-m=128; % number of unknowns
+m=511; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -98,22 +98,40 @@ grid_error=sqrt(h)*norm(abs(u-exact))
 %     h_even={time steps with x=0.5 included}
 %     E_even={respective errors in solution}
 % Similarly for H_odd, E_odd.
-h_even=[1.25e-1,4.167e-2,3.125e-2,1.825e-2,1.02e-2,7.46e-3];
-E_even=[5.3488e-3,2.3442e-3,1.8687e-3,1.1952e-3,6.925e-4,5.149e-4];
-h_odd=[1.4286e-1,5.263e-2,2.875e-2,1.887e-2,9.901e-3,7.752e-3];
-E_odd=[1.0333e-2,1.5132e-3,4.546e-4,1.998e-4,5.54e-5,3.40e-5];
+%h_even=[1.25e-1,4.167e-2,3.125e-2,1.825e-2,1.02e-2,7.46e-3];
+%E_even=[5.3488e-3,2.3442e-3,1.8687e-3,1.1952e-3,6.925e-4,5.149e-4];
+%h_odd=[1.4286e-1,5.263e-2,2.875e-2,1.887e-2,9.901e-3,7.752e-3];
+%E_odd=[1.0333e-2,1.5132e-3,4.546e-4,1.998e-4,5.54e-5,3.40e-5];
 % Calculate approximate rate of convergence values
-p_even=zeros(1,length(h_even)-1);
-p_odd=zeros(1,length(h_odd)-1);
-for i=2:length(p_even)+1
-    p_even(i-1)=(log(E_even(i))-log(E_even(i-1)))/(log(h_even(i))-log(h_even(i-1)));
-    p_odd(i-1)=(log(E_odd(i))-log(E_odd(i-1)))/(log(h_odd(i))-log(h_odd(i-1)));
-end
+%p_even=zeros(1,length(h_even)-1);
+%p_odd=zeros(1,length(h_odd)-1);
+%for i=2:length(p_even)+1
+%   p_even(i-1)=(log(E_even(i))-log(E_even(i-1)))/(log(h_even(i))-log(h_even(i-1)));
+%   p_odd(i-1)=(log(E_odd(i))-log(E_odd(i-1)))/(log(h_odd(i))-log(h_odd(i-1)));
+%end
 % Average p value
-p_even_avg=(1/length(p_even))*sum(p_even);
-p_odd_avg=(1/length(p_odd))*sum(p_odd);
-% Log-Log plot of time step vs. error
-loglog(h_even,E_even,'r--o',h_odd,E_odd,'b--o',h_even,h_even.^2,'k')
+%p_even_avg=(1/length(p_even))*sum(p_even);
+%p_odd_avg=(1/length(p_odd))*sum(p_odd);
+%Log-Log plot of time step vs. error
+%loglog(h_even,E_even,'r--o',h_odd,E_odd,'b--o',h_even,h_even.^2,'k')
+%grid on
+%legend('Mesh w/ x=0.5','Mesh w/out x=0.5','Order 2 Convergence')
+%xlabel('Mesh Width'); ylabel('Error')
+
+% v5.6.n2
+% Plot 5
+% The "odd" system above yielded order 2 convergence as would be hoped for
+%   with the centered difference approximation that we used.  "Even"
+%   yielded order 0.85 convergence.  We now test the order of convergence
+%   for a set of grids which both do and do not include x=0.5.
+h_mix=[h_even(1),h_odd(2),h_even(3),h_odd(4),h_even(5),h_odd(6)];
+E_mix=[E_even(1),E_odd(2),E_even(3),E_odd(4),E_even(5),E_odd(6)];
+p_mix=zeros(1,length(h_mix)-1);
+for i=2:length(p_mix)+1
+    p_mix(i-1)=(log(E_mix(i))-log(E_mix(i-1)))/(log(h_mix(i))-log(h_mix(i-1)));
+end
+p_mix_avg=(1/length(p_mix))*sum(p_mix)
+loglog(h_mix,E_mix,'r--o',h_mix,h_mix.^2,'k--o')
 grid on
-legend('Mesh w/ x=0.5','Mesh w/out x=0.5','Order 2 Convergence')
+legend('Mixed Mesh','Order 2 Convergence')
 xlabel('Mesh Width'); ylabel('Error')
