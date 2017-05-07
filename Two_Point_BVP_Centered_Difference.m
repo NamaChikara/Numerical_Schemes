@@ -1,4 +1,4 @@
-m=15; % number of unknowns
+m=128; % number of unknowns
 h=1/(m+1); % mesh width
 
 x=[0:h:1];  % x-grid
@@ -7,7 +7,7 @@ u=zeros(m+2,1);  % Initialize solution vector
 u(1)=0;     % Boundary condition, u(x=0)
 u(m+2)=0;   % Boundary condition, u(x=1)
 
-% f=@(x) 0;  % u''=f(x)
+f=@(x) 0;  % u''=f(x)
 
 F=zeros(m,1);   % Column vector for numerical scheme.
 F(1)=f(x(2))-u(1)/h^2;  % f(x=h)-f(x=0)/h^2
@@ -41,16 +41,25 @@ exact2=@(x) 0.5.*x.^2-0.625.*x+0.125;
 region2=[0.5:0.01:1];
 
 
-%plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
+plot(x,u,'r',region1,exact1(region1),'-k',region2,exact2(region2),'-k')
 %plot(x,abs(u-exact(x)),'r')
 
-grid_error=sqrt(h)*norm(abs(u-exact(x)))
+exact=zeros(1,length(x));
+
+for i=1:length(x)
+    if x(i)<0.5
+        exact(i)=-0.125*x(i);
+    else exact(i)=0.5*x(i)^2-0.625*x(i)+0.125;
+    end
+end
+
+grid_error=sqrt(h)*norm(abs(u-exact))
 
 
 %%
 % v4.30.n2
 
-% Plot 1
+% Plot 1  (Spring 2017, Report 3)
 % Log-Log plot of error vs. h for f(x)=sin(pi*x) and grid refinements of
 % 0.5 for 2^{-3} through 2^{-6}.
 % x=[2^(-6),2^(-5),2^(-4),2^(-3)]; % mesh size
@@ -60,7 +69,7 @@ grid_error=sqrt(h)*norm(abs(u-exact(x)))
 % xlabel('mesh size (h)'); ylabel('Error on (0,1)')
 
 % v4.30.n3
-% Plot 2
+% Plot 2  (Spring 2017, Report 3)
 % Plot of solutions for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids of
 %   m=6,7,14,15 plus the exact solution of 
 %   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5
@@ -72,7 +81,7 @@ grid_error=sqrt(h)*norm(abs(u-exact(x)))
 % lgnd.Location='north';
 
 % v5.3.n1
-% Plot 3
+% Plot 3   (Spring 2017, Report 3)
 % Absolute value of pointwise error for f(x)=(0 if x<0.5)U(1 if x>=0.5) 
 %   and grids of m=6,7,14,15 with the exact solution:
 %   u(x)=-0.125*x if x<0.5, 0.5*x^2-0.625*x+0.125 if x>=0.5.
@@ -81,3 +90,30 @@ grid_error=sqrt(h)*norm(abs(u-exact(x)))
 % lgnd=legend('$h=1/7$','$h=1/8$','$h=1/15$','$h=1/16$');
 % set(lgnd,'Interpreter','latex')
 % lgnd.Location='northeast';
+
+% v5.6.n1
+% Plot 4 (Spring 2017, Report 4)
+% Grid-2-Norm error for f(x)=(0 if x<0.5)U(1 if x>=0.5) and grids which do
+%   and do not include  x=0.5.  
+%     h_even={time steps with x=0.5 included}
+%     E_even={respective errors in solution}
+% Similarly for H_odd, E_odd.
+h_even=[1.25e-1,4.167e-2,3.125e-2,1.825e-2,1.02e-2,7.46e-3];
+E_even=[5.3488e-3,2.3442e-3,1.8687e-3,1.1952e-3,6.925e-4,5.149e-4];
+h_odd=[1.4286e-1,5.263e-2,2.875e-2,1.887e-2,9.901e-3,7.752e-3];
+E_odd=[1.0333e-2,1.5132e-3,4.546e-4,1.998e-4,5.54e-5,3.40e-5];
+% Calculate approximate rate of convergence values
+p_even=zeros(1,length(h_even)-1);
+p_odd=zeros(1,length(h_odd)-1);
+for i=2:length(p_even)+1
+    p_even(i-1)=(log(E_even(i))-log(E_even(i-1)))/(log(h_even(i))-log(h_even(i-1)));
+    p_odd(i-1)=(log(E_odd(i))-log(E_odd(i-1)))/(log(h_odd(i))-log(h_odd(i-1)));
+end
+% Average p value
+p_even_avg=(1/length(p_even))*sum(p_even);
+p_odd_avg=(1/length(p_odd))*sum(p_odd);
+% Log-Log plot of time step vs. error
+loglog(h_even,E_even,'r--o',h_odd,E_odd,'b--o',h_even,h_even.^2,'k')
+grid on
+legend('Mesh w/ x=0.5','Mesh w/out x=0.5','Order 2 Convergence')
+xlabel('Mesh Width'); ylabel('Error')
