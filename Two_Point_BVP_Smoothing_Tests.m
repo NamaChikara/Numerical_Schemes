@@ -7,10 +7,9 @@
 %   we would like u to be four times differentiable.  
 % We first linearize the discontinuity at x=0.5, then check quadratic
 % smoothing. At each stage, we compare solutions.
-
-l=120; % number of x grid points
+l=211; % number of x grid points
 xe=1; % final x value
-h=xe/l; % dx
+h=xe/l % dx
 x=[0:h:xe]; % x grid
 
 % Numerical solution without smoothing
@@ -59,6 +58,8 @@ ul=zeros(length(x),1);  % Initialize solution vector
 ul(1)=0;     % Boundary condition, u(x=0)
 ul(length(x))=0;   % Boundary condition, u(x=1)
 
+ep=0.1;   % epsilon value
+
 Fl=zeros(length(x)-2,1);   % Column vector for numerical scheme.
 Fl(1)=0; 
 Fl(end)=1;
@@ -77,7 +78,6 @@ ul=ul';
 
 % Exact solution to linear smoothing  (see Spring 2017, Report 4)
 
-ep=0.05;   % epsilon value
 a=(0.5-ep);  % to simplify matrix
 b=(0.5+ep);
 c=-(2*ep)^(-1);
@@ -112,10 +112,9 @@ for i=1:length(x)
 end
 
 % Grid-Norm Errors
-Analytical_vs_Numerical=sqrt(h)*norm(ex-ul)
 Linear_Analytical_vs_Linear_Numerical=sqrt(h)*norm(exl-ul)
 Analytical_vs_Linear_Numerical=sqrt(h)*norm(ex-ul)
 
 % Plots
-plot(x,ex,'k',x,exl,'k--',x,u,'b',x,ul,'b--')  % Analytic, Lin Analytic, Lin Numerical
-legend('Analytical','Linear Analytical','Numerical','Linear Numerical')
+%plot(x,ex,'k',x,exl,'k--',x,u,'b',x,ul,'b--')  % Analytic, Lin Analytic, Lin Numerical
+%legend('Analytical','Linear Analytical','Numerical','Linear Numerical')
