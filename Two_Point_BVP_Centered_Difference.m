@@ -20,14 +20,14 @@ for i=2:m-1
 end
 
 A=zeros(m,m);   % Matrix for numerical scheme.
-A(1,1)=-2;  % Columns 1 and m done manually because they do not
-A(1,2)=1;   %   include both the lower and upper diagonals.
-A(m,m)=-2;  
-A(m,m-1)=1;
+A(1,1)=2;  % Columns 1 and m done manually because they do not
+A(1,2)=-1;   %   include both the lower and upper diagonals.
+A(m,m)=2;  
+A(m,m-1)=-1;
 for i=2:m-1; 
-    A(i,i)=-2;  % main diagonal is -2
-    A(i,i-1)=1; % upper diagonal is 1
-    A(i,i+1)=1; % lower diagonal is 1
+    A(i,i)=2;  % main diagonal is -2
+    A(i,i-1)=-1; % upper diagonal is 1
+    A(i,i+1)=-1; % lower diagonal is 1
 end
 
 u(2:m+1)=h^2.*(A^(-1)*F);
@@ -35,9 +35,9 @@ u=u';
 
 %exact=@(x) (-1/pi^2)*sin(pi*x); % exact solution
 
-exact1=@(x) -0.125.*x;
+exact1=@(x) 0.125.*x;
 region1=[0:0.01:0.5]; 
-exact2=@(x) 0.5.*x.^2-0.625.*x+0.125;
+exact2=@(x) -0.5.*x.^2+0.625.*x-0.125;
 region2=[0.5:0.01:1];
 
 
@@ -48,8 +48,8 @@ exact=zeros(1,length(x));
 
 for i=1:length(x)
     if x(i)<0.5
-        exact(i)=-0.125*x(i);
-    else exact(i)=0.5*x(i)^2-0.625*x(i)+0.125;
+        exact(i)=0.125*x(i);
+    else exact(i)=-0.5*x(i)^2+0.625*x(i)-0.125;
     end
 end
 
@@ -124,14 +124,14 @@ grid_error=sqrt(h)*norm(abs(u-exact))
 %   with the centered difference approximation that we used.  "Even"
 %   yielded order 0.85 convergence.  We now test the order of convergence
 %   for a set of grids which both do and do not include x=0.5.
-h_mix=[h_even(1),h_odd(2),h_even(3),h_odd(4),h_even(5),h_odd(6)];
-E_mix=[E_even(1),E_odd(2),E_even(3),E_odd(4),E_even(5),E_odd(6)];
-p_mix=zeros(1,length(h_mix)-1);
-for i=2:length(p_mix)+1
-    p_mix(i-1)=(log(E_mix(i))-log(E_mix(i-1)))/(log(h_mix(i))-log(h_mix(i-1)));
-end
-p_mix_avg=(1/length(p_mix))*sum(p_mix)
-loglog(h_mix,E_mix,'r--o',h_mix,h_mix.^2,'k--o')
-grid on
-legend('Mixed Mesh','Order 2 Convergence')
-xlabel('Mesh Width'); ylabel('Error')
+% h_mix=[h_even(1),h_odd(2),h_even(3),h_odd(4),h_even(5),h_odd(6)];
+% E_mix=[E_even(1),E_odd(2),E_even(3),E_odd(4),E_even(5),E_odd(6)];
+% p_mix=zeros(1,length(h_mix)-1);
+% for i=2:length(p_mix)+1
+%     p_mix(i-1)=(log(E_mix(i))-log(E_mix(i-1)))/(log(h_mix(i))-log(h_mix(i-1)));
+% end
+% p_mix_avg=(1/length(p_mix))*sum(p_mix)
+% loglog(h_mix,E_mix,'r--o',h_mix,h_mix.^2,'k--o')
+% grid on
+% legend('Mixed Mesh','Order 2 Convergence')
+% xlabel('Mesh Width'); ylabel('Error')
