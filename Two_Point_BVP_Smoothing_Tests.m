@@ -13,7 +13,7 @@ xe=1; % final x value
 h=xe/l; % dx
 x=[0:h:xe]; % x grid
 
-n=100000;   
+n=10;   
 ep=1/n;  % epsilon=1/n for linear smoothing
 
 % Numerical solution without smoothing
@@ -33,14 +33,14 @@ for i=2:length(x)-3
 end
 
 A=zeros(length(x)-2,length(x)-2);   % Matrix for numerical scheme.
-A(1,1)=-2;  % Columns 1 and m done manually because they do not
-A(1,2)=1;   %   include both the lower and upper diagonals.
-A(length(x)-2,length(x)-2)=-2;  
-A(length(x)-2,length(x)-3)=1;
+A(1,1)=2;  % Columns 1 and m done manually because they do not
+A(1,2)=-1;   %   include both the lower and upper diagonals.
+A(length(x)-2,length(x)-2)=2;  
+A(length(x)-2,length(x)-3)=-1;
 for i=2:length(x)-3; 
-    A(i,i)=-2;  % main diagonal is -2
-    A(i,i-1)=1; % upper diagonal is 1
-    A(i,i+1)=1; % lower diagonal is 1
+    A(i,i)=2;  % main diagonal is 2  (f=-u''(x) instead of f=u''(x))
+    A(i,i-1)=-1; % upper diagonal is -1
+    A(i,i+1)=-1; % lower diagonal is -1
 end
 
 u(2:length(x)-1)=h^2.*(A^(-1)*F);
@@ -51,8 +51,8 @@ u=u';
 ex=zeros(1,length(x));
 for i=1:length(x)
     if x(i)<0.5
-        ex(i)=-0.125*x(i);
-    else ex(i)=0.5*x(i)^2-0.625*x(i)+0.125;
+        ex(i)=0.125*x(i);
+    else ex(i)=-0.5*x(i)^2+0.625*x(i)-0.125;
     end
 end
 
@@ -105,10 +105,10 @@ C=R^(-1)*S; % coefficient matrix
 exl=zeros(1,length(x));
 for i=1:length(x)
     if x(i)<0.5-ep
-        exl(i)=C(1)*x(i)+C(4);
+        exl(i)=-C(1)*x(i)-C(4);
     else if (0.5-ep<=x(i))&&(x(i)<=0.5+ep)
-            exl(i)=((1/6)*x(i)^3-(0.5)*a*x(i)^2+C(2)*x(i)+C(5))*(2*ep)^(-1);
-        else exl(i)=0.5*x(i)^2+C(3)*x(i)+C(6);
+            exl(i)=-((1/6)*x(i)^3-(0.5)*a*x(i)^2+C(2)*x(i)+C(5))*(2*ep)^(-1);
+        else exl(i)=-0.5*x(i)^2-C(3)*x(i)-C(6);
         end
     end
 end
